@@ -1,3 +1,4 @@
+https://chatgpt.com/backend-api/estuary/content?id=55e97370edaca74%23file_00000000328c7208883eb8e0726a362b%23wm&ts=494599&p=fs&cid=1&sig=fcdb752f62d512fc95ffaf171f63f8ffd65dc095f54c6828fef3947cd2cd77d9&v=0
 # NGINX Reverse Proxy, Load Balancing and Route 53 Integration on AWS
 
 ## Project Overview
