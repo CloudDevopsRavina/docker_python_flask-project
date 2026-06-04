@@ -111,6 +111,7 @@ server {
 }
 ```
 
+
 ### Benefits
 
 - Hide application port
@@ -119,6 +120,124 @@ server {
 - Centralized logging
 
 ---
+
+# NGINX Reverse Proxy on AWS EC2
+
+## Architecture
+
+```text
+                Internet Users
+                       │
+                       ▼
+              NGINX Server (EC2)
+                13.232.212.96
+                 Port 80
+                       │
+                       ▼
+            Flask Application Server
+                13.203.74.236
+                 Port 5000
+```
+
+## Project Overview
+
+In this project, I configured NGINX as a Reverse Proxy on an AWS EC2 instance. The NGINX server receives client requests on port 80 and forwards them to a Flask application running on a separate EC2 instance on port 5000.
+
+This setup hides the backend application from end users and provides a single entry point for all incoming requests.
+
+## NGINX Configuration
+
+File:
+
+```bash
+/etc/nginx/conf.d/flaskapp.conf
+```
+
+Configuration:
+
+```nginx
+server {
+    listen 80;
+    server_name 13.232.212.96;
+
+    location / {
+        proxy_pass http://13.203.74.236:5000;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+## Request Flow
+
+```text
+User
+ │
+ ▼
+http://13.232.212.96
+ │
+ ▼
+NGINX Reverse Proxy
+ │
+ ▼
+http://13.203.74.236:5000
+ │
+ ▼
+Flask Application
+```
+
+## Validation Commands
+
+Verify backend application:
+
+```bash
+curl http://13.203.74.236:5000
+```
+
+Validate NGINX configuration:
+
+```bash
+sudo nginx -t
+```
+
+Reload NGINX:
+
+```bash
+sudo systemctl reload nginx
+```
+
+Check NGINX status:
+
+```bash
+sudo systemctl status nginx
+```
+
+## Key Learnings
+
+* Reverse Proxy Architecture
+* NGINX Configuration Management
+* AWS EC2 Networking
+* Flask Application Deployment
+* HTTP Request Forwarding
+* Linux System Administration
+* Troubleshooting 502 Bad Gateway Errors
+
+## Benefits of Reverse Proxy
+
+* Hides backend server details
+* Provides a single entry point
+* Improves security
+* Simplifies application access
+* Enables SSL termination
+* Centralizes logging and monitoring
+
+## Conclusion
+
+Successfully implemented a Cross-Server Reverse Proxy using NGINX on AWS. The NGINX server receives client requests and securely forwards them to a backend Flask application running on a separate EC2 instance.
+
 
 ## Scenario 4: Cross-Server Reverse Proxy
 
